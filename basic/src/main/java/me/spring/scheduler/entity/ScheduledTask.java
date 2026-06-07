@@ -32,7 +32,7 @@ public class ScheduledTask {
     private String taskGroup;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private taskDefinition;
+    private String taskDefinition;
 
     @Column(nullable = false, length = 100)
     private String cronExpression;

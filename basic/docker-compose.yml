@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ffms-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Xie200512
+      MYSQL_DATABASE: ffms_db
+      MYSQL_USER: springuser
+      MYSQL_PASSWORD: springpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - ffms-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: ffms-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - ffms-network
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: ffms-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - ffms-network
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  ffms-network:
+    driver: bridge
